@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
 
 # Define executable name
-set(APP_NAME "hello-window")
+set(APP_NAME "alpha-window")
 
 # Define source files
 file (GLOB SRC_FILES
-    "src/hellowindow.cpp"
+    "src/alphawindow.cpp"
 )
 
 # Build executable from source file

@@ -59,7 +59,6 @@ if [[ "$clean" == "" || "$clean" == "ON" || "$clean" == "On" || "$clean" == "on"
     echo "Clean before build: On"
     clean="on"
 elif [[ "$clean" == "OFF" || "$clean" == "Off" || "$clean" == "off" ]]; then
-    echo "Clean before build: Off"
     clean="off"
 else
     echo "ERROR: Invalid argument for 'clean'. Should be 'on'/'off' or empty e.g. '--clean' to enable clean. Received: '$clean'"
