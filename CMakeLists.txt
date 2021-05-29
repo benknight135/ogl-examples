@@ -95,10 +95,65 @@ if(NOT glad_POPULATED)
     endif()
 endif()
 
-# Add hello-windows application
-# The hello world of OpenGL
-add_subdirectory(hello-window)
+# Get glm git repository
+# Used for OpenGL mathematics
+FetchContent_Declare(
+	glm
+	GIT_REPOSITORY https://github.com/g-truc/glm.git
+)
 
-# Add alpha-windows application
-# This demonstrate transparent windows
-add_subdirectory(alpha-window)
+FetchContent_GetProperties(glm)
+if(NOT glm_POPULATED)
+	FetchContent_Populate(glm)
+	set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
+	add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
+endif()
+
+# Get linmath from git repository
+# Used for linear mathematics
+FetchContent_Declare(
+        linmath
+        GIT_REPOSITORY https://github.com/datenwolf/linmath.h.git
+)
+
+FetchContent_GetProperties(linmath)
+if(NOT linmath_POPULATED)
+    FetchContent_Populate(linmath)
+    add_library(linmath INTERFACE)
+    target_include_directories(linmath INTERFACE ${linmath_SOURCE_DIR})
+endif()
+
+# Get tinycthread from git repository
+# Used for mutli-threaded
+FetchContent_Declare(
+        tinycthread
+        GIT_REPOSITORY https://github.com/tinycthread/tinycthread.git
+)
+
+FetchContent_GetProperties(tinycthread)
+if(NOT tinycthread_POPULATED)
+    FetchContent_Populate(tinycthread)
+    #add_library(tinycthread INTERFACE)
+    #target_include_directories(tinycthread INTERFACE ${tinycthread_SOURCE_DIR})
+    add_subdirectory(${tinycthread_SOURCE_DIR} ${tinycthread_BINARY_DIR})
+endif()
+
+# Add examples
+
+# Add hello-windows example
+# The hello world of OpenGL
+add_subdirectory(examples/hello-window)
+
+# Add alpha-windows example
+# This demonstrates transparent windows
+add_subdirectory(examples/alpha-window)
+
+if (GLAD_PROFILE MATCHES "compatibility")
+    # Add particles example
+    # This demonstrate a complexe particle system
+    add_subdirectory(examples/particles)
+endif()
+
+# Add pointcloud example
+# This demonstrate a point cloud viewer
+add_subdirectory(examples/pointcloud)
