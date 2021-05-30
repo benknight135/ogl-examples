@@ -140,20 +140,18 @@ endif()
 
 # Add examples
 
-# Add hello-windows example
-# The hello world of OpenGL
+# Hello World example
+# Render an empty window with a title
 add_subdirectory(examples/hello-window)
 
-# Add alpha-windows example
-# This demonstrates transparent windows
+# Transparent window example
+# Displays a triangle on a transparent window with UI decorations hidden
 add_subdirectory(examples/alpha-window)
 
-if (GLAD_PROFILE MATCHES "compatibility")
-    # Add particles example
-    # This demonstrate a complexe particle system
-    add_subdirectory(examples/particles)
-endif()
-
-# Add pointcloud example
-# This demonstrate a point cloud viewer
+# PointCloud viewer example
+# Load a PointCloud from file and view with interactive camera
 add_subdirectory(examples/pointcloud)
+
+# Game of Life example
+# OpenGL implimentation of Conway's Game of Life
+add_subdirectory(examples/gol)
