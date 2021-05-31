@@ -3,6 +3,7 @@
 // Include standard headers
 #include <cstdlib>
 #include <iostream>
+#include <chrono>
 
 // Include OpenGL headers
 #ifdef WITH_GLAD2
@@ -23,6 +24,14 @@ public:
 
 	bool isOpen();
 
+	float getAspectRatio();
+
+	int getWidth();
+
+	int getHeight();
+
+	float getFPS();
+
 	void centerWindow();
 
 	GLFWwindow * getGLFWWindow();
@@ -31,4 +40,6 @@ public:
 private:
 	GLFWmonitor* glfw_monitor;
 	GLFWwindow * glfw_window;
+	float fps;
+	std::chrono::steady_clock::time_point last_update_time;
 };

@@ -1,5 +1,9 @@
 #pragma once
 
+// Include standard headers
+#include <vector>
+#include <iostream>
+
 // Include OpenGL headers
 #ifdef WITH_GLAD2
     // Glad v2 beta uses different header name
@@ -13,11 +17,13 @@
 class GLTriangle{
 public:
     // WARNING: Initalise after glfw and glad have been initalised
-	GLTriangle(int x, int y, int z);
+	GLTriangle(float size = 1.0f, float x = 0.0f, float y = 0.0f, float z = 0.0f, 
+               float r = 1.0f, float g = 1.0f, float b = 1.0f, float a = 1.0f);
 
 	void draw();
 
-    void updatePosition(int x, int y, int z);
+    void updatePosition(float x, float y, float z);
+    void updateColor(float r, float g, float b, float a);
 
     // WARNING: cleanup before glfwTerminate (e.g. 'delete(golPixel);')
     ~GLTriangle();
@@ -27,30 +33,7 @@ private:
     GLuint colorBuffer;
 	GLuint vertexArrayID;
 	GLuint vertexBuffer;
-};
-
-// Game Of Life pixel entity
-// Will store the status of the entity (position, alive/dead)
-// and handle drawing the object in the window
-class GolEntity{
-public:
-    // WARNING: Initalise after glfw and glad have been initalised
-	GolEntity(bool alive, int x, int y, int z);
-
-    void updateState(GolEntity golEntityNeighbours[8]);
-
-    // Draw OpenGL shape reprsentation of entity in window
-	void draw();
-
-    void updatePosition(int x, int y, int z);
-    
-    // Get alive/dead state of entity
-    bool isAlive();
-
-    // WARNING: Cleanup before glfwTerminate (e.g. 'delete(golPixel);')
-    ~GolEntity();
-
-private:
-	GLTriangle* gl_shape;
-    bool alive;
+    float vertexData[18];
+    float colorData[24];
+    float unitSize;
 };

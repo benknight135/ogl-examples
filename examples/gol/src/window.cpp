@@ -1,6 +1,6 @@
 #include "window.h"
 
-Window::Window(bool fullscreen, int width, int height){
+Window::Window(bool fullscreen, int width, int height): fps(0) {
     // Initalise glfw
     if (!glfwInit())
         exit(EXIT_FAILURE);
@@ -24,7 +24,7 @@ Window::Window(bool fullscreen, int width, int height){
     // Create window
     if (fullscreen){
         const GLFWvidmode* mode = glfwGetVideoMode(this->glfw_monitor);
-        this->glfw_window = glfwCreateWindow(mode->width, mode->height, "Game of Life", glfwGetPrimaryMonitor(), NULL);
+        this->glfw_window = glfwCreateWindow(mode->width, mode->height, "Game of Life", NULL, NULL);
     } else {
         this->glfw_window = glfwCreateWindow(width, height, "Game of Life", NULL, NULL);
     }
@@ -55,16 +55,12 @@ Window::Window(bool fullscreen, int width, int height){
     // Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(this->glfw_window, GLFW_STICKY_KEYS, GL_TRUE);
 
-    if (fullscreen){
-        //glfwSetWindowMonitor(this->glfw_window, this->glfw_monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-    } else {
-        centerWindow();
-    }
+    centerWindow();
 
     // Enable depth test
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
+    //glDepthFunc(GL_LESS);
 }
 
 void Window::clear(){
@@ -77,6 +73,10 @@ void Window::update(){
     // Swap buffers
     glfwSwapBuffers(this->glfw_window);
     glfwPollEvents();
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_update_time).count();
+    fps = 1.0f/(ms/1000.0f);
+    last_update_time = now;
 }
 
 bool Window::isOpen(){
@@ -87,6 +87,29 @@ bool Window::isOpen(){
 
 GLFWwindow * Window::getGLFWWindow(){
     return this->glfw_window;
+}
+
+int Window::getWidth(){
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(this->glfw_window, &windowWidth, &windowHeight);
+    return windowWidth;
+}
+
+int Window::getHeight(){
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(this->glfw_window, &windowWidth, &windowHeight);
+    return windowHeight;
+}
+
+float Window::getAspectRatio(){
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(this->glfw_window, &windowWidth, &windowHeight);
+    float ratio = (float)windowWidth / (float)windowHeight;
+    return ratio;
+}
+
+float Window::getFPS(){
+    return this->fps;
 }
 
 // Center window on monitor

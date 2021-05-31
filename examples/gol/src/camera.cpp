@@ -1,15 +1,15 @@
 #include "camera.h"
 #include "shaders.h"
 
-Camera::Camera(int x, int y, int z, float fov){
+Camera::Camera(int x, int y, int z, float fov, float ratio){
     // Compile and load shaders
     programID = loadShaders();
 
     // Get a handle for our "MVP" uniform
     MatrixID = glGetUniformLocation(programID, "MVP");
 
-    // Projection matrix : 45 degree Field of View, 1:1 ratio, display range : 0.1 unit <-> 100 units
-    Projection = glm::perspective(glm::radians(fov), 1.0f / 1.0f, 0.1f, 100.0f);
+    // Projection matrix : 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+    Projection = glm::perspective(glm::radians(fov), ratio, 0.1f, 100.0f);
     // Camera matrix
     View = glm::lookAt(
         glm::vec3(x,y,z), // Camera is at (4,3,3), in World Space

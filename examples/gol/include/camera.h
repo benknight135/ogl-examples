@@ -13,7 +13,7 @@
 
 class Camera{
 public:
-    Camera(int x = 0, int y = 0, int z = 3, float fov = 45.0f);
+    Camera(int x = 0, int y = 0, int z = 3, float fov = 45.0f, float ratio = 4.0f / 3.0f);
 
     void update();
 
