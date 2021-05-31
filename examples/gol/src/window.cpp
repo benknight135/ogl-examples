@@ -1,6 +1,6 @@
 #include "window.h"
 
-Window::Window(bool fullscreen, int width, int height): fps(0) {
+Window::Window(bool fullscreen, int width, int height, bool borderless): fps(0) {
     // Initalise glfw
     if (!glfwInit())
         exit(EXIT_FAILURE);
@@ -12,7 +12,8 @@ Window::Window(bool fullscreen, int width, int height): fps(0) {
     // Enable transparent frame buffer
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 	// Remove window decoration (title bar, boarder, etc...)
-	glfwWindowHint(GLFW_DECORATED, false);
+    if (borderless)
+	    glfwWindowHint(GLFW_DECORATED, false);
 
     this->glfw_monitor = glfwGetPrimaryMonitor();
     // Check monitor is valid
@@ -58,9 +59,9 @@ Window::Window(bool fullscreen, int width, int height): fps(0) {
     centerWindow();
 
     // Enable depth test
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
-    //glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LESS);
 }
 
 void Window::clear(){

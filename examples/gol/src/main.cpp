@@ -55,16 +55,16 @@ int main(void)
 
     // Setup Game of Life entities
     // Create grid of bool to signify alive/dead
-	float e_size = 0.04f;
+	float e_size = 0.03f;
 	bool display = true;
-	int disp_grid_width = (int)(window->getWidth() * 0.2f);
+	int disp_grid_width = (int)(window->getWidth() * 0.23f);
 	int disp_grid_height = (int)((1.0f/window->getAspectRatio())*disp_grid_width);
 
 	int sim_grid_size;
 	if (disp_grid_height > disp_grid_width){
-		sim_grid_size = (int)(disp_grid_height * 1.2f);
+		sim_grid_size = (int)(disp_grid_height * 2.0f);
 	} else {
-		sim_grid_size = (int)(disp_grid_width * 1.2f);
+		sim_grid_size = (int)(disp_grid_width * 2.0f);
 	}
 	std::cout << "Simulation grid size: " << sim_grid_size << ", " << sim_grid_size << std::endl;
 	std::cout << "Visible size: " << disp_grid_width << ", " << disp_grid_height << std::endl;
@@ -86,15 +86,28 @@ int main(void)
 	// Create GL Triangle vector to display alive entities
 	// Must be initalised after Window as entities require OpenGL to be ready
 	std::vector<GLTriangle*> glEntities = std::vector<GLTriangle*>();
+	int disp_center_x = (int)(sim_grid_size / 2.0f);
+	int disp_center_y = (int)(sim_grid_size / 2.0f);
 	if (display){
 		for (int i = disp_grid_min_x; i < disp_grid_max_x; i++)
 		{
 			for (int j = disp_grid_min_y; j < disp_grid_max_y; j++)
 			{
 				if(alive_mat[i][j]){
+					int dist_x = abs(disp_center_x - i);
+					int dist_y = abs(disp_center_y - j);
+					float a_x = 1.0f - ((float)dist_x/(float)(disp_grid_width / 2.0f));
+					float a_y = 0.9f - ((float)dist_y/(float)(disp_grid_height / 2.0f));
+					float a = a_x * a_y;
+					float r = 6 * a;
+					a = 6 * a;
+					if (a > 1.0)
+						a = 1.0;
+					if (r > 1.0)
+						r = 1.0;
 					glEntities.push_back(new GLTriangle(
 						e_size, (i-sim_grid_size/2.0f)*e_size, (j-sim_grid_size/2.0f)*e_size, 0.0f,
-						1.0f, 0.0f, 1.0f, 1.0f
+						r, 0.0f, r, a
 					));
 				}
 			}
@@ -192,9 +205,20 @@ int main(void)
 				{
 					if (tmp_alive_mat[i][j] != alive_mat[i][j]){
 						if (alive_mat[i][j]){ // was dead, now alive so add
+							int dist_x = abs(disp_center_x - i);
+							int dist_y = abs(disp_center_y - j);
+							float a_x = 1.0f - ((float)dist_x/(float)(disp_grid_width / 2.0f));
+							float a_y = 0.9f - ((float)dist_y/(float)(disp_grid_height / 2.0f));
+							float a = a_x * a_y;
+							float r = 6 * a;
+							a = 6 * a;
+							if (a > 1.0)
+								a = 1.0;
+							if (r > 1.0)
+								r = 1.0;
 							glEntities.push_back(new GLTriangle(
 								e_size, (i-sim_grid_size/2.0f)*e_size, (j-sim_grid_size/2.0f)*e_size, 0.0f,
-								1.0f, 0.0f, 1.0f, 1.0f
+								r, 0.0f, r, a
 							));
 						}
 					}
@@ -210,7 +234,7 @@ int main(void)
 
 		// Update window frame
 		window->update();
-		std::cout << "FPS: " << window->getFPS() << std::endl;
+		//std::cout << "FPS: " << window->getFPS() << std::endl;
 		//std::cout << "Size: " << glEntities.size() << std::endl;
 
 		sw = !sw;

@@ -16,7 +16,7 @@
 
 class Window{
 public:
-	Window(bool fullscreen = false, int width = 480, int height = 480);
+	Window(bool fullscreen = false, int width = 480, int height = 480, bool borderless = true);
 
 	void clear();
 
